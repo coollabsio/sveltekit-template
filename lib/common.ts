@@ -13,3 +13,17 @@ export const prisma = new PrismaClient({
 	errorFormat: 'pretty',
 	rejectOnNotFound: false
 });
+
+// Error example { status: 400, message: 'Invalid validation key.' }
+export function errorHandlerEndpoints(error) {
+	if (!error.status) {
+		error.status = 500;
+	}
+	return {
+		status: error.status,
+		body: {
+			message: error.message,
+			...error
+		}
+	}
+}
