@@ -15,12 +15,17 @@ export const prisma = new PrismaClient({
 });
 
 // Error example { status: 400, message: 'Invalid validation key.' }
-export function errorHandlerEndpoints(error) {
+export function errorHandlerEndpoints(error, isPublic = false) {
 	if (!error.status) {
 		error.status = 500;
 	}
+	const headers = {}
+	if (isPublic) {
+		headers['Access-Control-Allow-Origin'] = '*';
+	}
 	return {
 		status: error.status,
+		headers,
 		body: {
 			message: error.message,
 			...error
